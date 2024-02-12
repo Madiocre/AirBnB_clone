@@ -12,22 +12,22 @@ class FileStorage:
         return self.__objects
 
     def new(self, obj):
-        varname = obj.__class__.__name__
-        self.__objects["{}.{}".format(varname, obj.id)] = obj
+        var_name = obj.__class__.__name__
+        self.__objects["{}.{}".format(var_name, obj.id)] = obj
 
     def save(self):
-        odict = FileStorage.__objects
-        objdict = {obj: odict[obj].to_dict() for obj in odict.keys()}
+        o_dict = FileStorage.__objects
+        obj_dict = {obj: o_dict[obj].to_dict() for obj in o_dict.keys()}
         with open(FileStorage.__file_path, "w") as f:
-            json.dump(objdict, f)
+            json.dump(obj_dict, f)
 
     def reload(self):
         try:
             with open(FileStorage.__file_path) as f:
-                objdict = json.load(f)
-                for o in objdict.values():
-                    cls_name = o["__class__"]
+                obj_dict = json.load(f)
+                for o in obj_dict.values():
+                    cls_nme = o["__class__"]
                     del o["__class__"]
-                    self.new(eval(cls_name)(**o))
+                    self.new(eval(cls_nme)(**o))
         except FileNotFoundError:
             return
